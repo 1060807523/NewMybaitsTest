@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <properties resource="dp.properties"></properties>
+    <settings><!--运行时参数，可有可无-->
+        <setting name="logImpl" value="LOG4J"></setting>
+    </settings>
+    <typeAliases><!--不能写在下面-->
+        <typeAlias type="main.pojo.Bill" alias="Bill"/>
+        <typeAlias type="main.pojo.Provider" alias="Provider"/>
+    </typeAliases>
+    <environments default="myConfig"><!--默认环境-->
+        <environment id="myConfig"><!--环境-->
+            <transactionManager type="JDBC"><!--还有manage用spring-->    </transactionManager>
+            <dataSource type="POOLED"><!--数据源,支持连接池-->
+                <property name="driver" value="${driver}" /><!--设置数据库属性，从properties文件读取,name映射到properties文件属性等号的前面，value映射到等号后面-->
+                <property name="url" value="${url}" /><!--设置数据库属性，从properties文件读取-->
+                <property name="username" value="${username}" />
+                <property name="password" value="${password}" />
+            </dataSource>
+        </environment>
+        <!-- <environment id="test">环境可配置多个
+        </environment> -->
+    </environments>
+   
+    <mappers>
+        <mapper resource="main/dao/BillMapper.xml"/>
+        <mapper resource="main/dao/ProviderMapper.xml"/>
+    </mappers>
+</configuration>

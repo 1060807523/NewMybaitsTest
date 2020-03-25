@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="main.dao.BillMapper"><!-- 映射到dao层接口  src.daoInterface.goodsDao-->
+    <resultMap id="BillList" type="Bill">
+        <id property="id" column="id" />
+        <result property="billCode" column="billCode" />
+        <result property="productName" column="productName" />
+        <result property="providerId" column="providerId" />
+        <result property="isPayment" column="isPayment" />
+        <result property="creationDate" column="creationDate" />
+        <association property="provider" javaType="Provider" column="providerId" select="main.dao.ProviderMapper.getProvidersById"  />
+    </resultMap>
+    
+<!--    <resultMap id="Porviders" type="Provider">-->
+<!--        <id property="id" column="id" />-->
+<!--        <result property="proCode" column="proCode"/>-->
+<!--        <result property="proName" column="proName"/>-->
+<!--        <result property="proDesc" column="proDesc"/>-->
+<!--        <result property="proContact" column="proContact"/>-->
+<!--        <result property="proPhone" column="proPhone"/>-->
+<!--        <result property="proAddress" column="proAddress"/>-->
+<!--        <result property="proFax" column="proFax"/>-->
+<!--    </resultMap>-->
+        
+    <select id="getBillList" resultMap="BillList" parameterType="Bill">
+        
+        select  b.* ,p.proName from smbms_bill b , smbms_provider p
+            where b.productName like CONCAT('%',#{productName},'%')
+                and b.providerId = #{providerId}
+                and b.isPayment = #{isPayment}
+                and b.providerId =p.id
+    </select>
+    
+    <select id="getBill" resultMap="BillList" parameterType="Integer">
+        select * from smbms_bill 
+        <where>
+            providerID = #{id}
+        </where>
+    </select>
+    
+<!--    <select id="getBillsProviders" resultMap="Porviders" parameterType="Provider">-->
+<!--        select * from smbms_provider sp-->
+<!--        <where>-->
+<!--            sp.id = #{id}-->
+<!--        </where>-->
+<!--    </select>-->
+    <select id="getBillBySomeValue" resultMap="BillList">
+        select * from smbms_bill 
+        <where>
+            1=1
+            <if test="id1!=null">and id = #{id1}</if>
+        </where>
+    </select>
+</mapper>
